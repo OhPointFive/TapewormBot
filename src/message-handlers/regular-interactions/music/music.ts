@@ -23,7 +23,7 @@ function getQueueObject(guild: Guild) {
 async function playSong(message: Message) {
     const { content } = message;
 
-    const match = content.match(/[\!]p(?:lay)? (.*)/i);
+    const match = content.match(/^[\!]p(?:lay)? (.*)/i);
     if (!match) { return; }
     if (!message.guild) { return; }
 
@@ -38,7 +38,7 @@ async function playSong(message: Message) {
 async function playtopSong(message: Message) {
     const { content } = message;
 
-    const match = content.match(/[\!]p(?:lay)?top (.*)/i);
+    const match = content.match(/^[\!]p(?:lay)?top (.*)/i);
     if (!match) { return; }
     if (!message.guild) { return; }
 
@@ -53,7 +53,7 @@ async function playtopSong(message: Message) {
 async function playRandom(message: Message) {
     const { content } = message;
 
-    if (!content.match(/[\!](?:p(?:lay)?)?rand(?:om)?/i)) { return; }
+    if (!content.match(/^[\!](?:p(?:lay)?)?rand(?:om)?/i)) { return; }
     if (!message.guild) { return; }
 
     const queue = getQueueObject(message.guild);
@@ -66,7 +66,7 @@ async function playRandom(message: Message) {
 async function playtopRandom(message: Message) {
     const { content } = message;
 
-    if (!content.match(/[\!](?:p(?:lay)?)?rand(?:om)top?/i)) { return; }
+    if (!content.match(/^[\!](?:p(?:lay)?)?rand(?:om)top?/i)) { return; }
     if (!message.guild) { return; }
 
     const queue = getQueueObject(message.guild);
@@ -79,7 +79,7 @@ async function playtopRandom(message: Message) {
 async function skipSong(message: Message) {
     const { content } = message;
 
-    if (!content.match(/[\!]skip/i)) { return; }
+    if (!content.match(/^[\!]skip/i)) { return; }
     if (!message.guild) { return; }
 
     const queue = getQueueObject(message.guild);
@@ -94,7 +94,7 @@ async function skipSong(message: Message) {
 async function nowPlaying(message: Message) {
     const { content } = message;
 
-    if (!content.match(/[\!]np/i)) { return; }
+    if (!content.match(/^[\!]np/i)) { return; }
     if (!message.guild) { return; }
 
     const queue = getQueueObject(message.guild);
@@ -109,7 +109,7 @@ async function nowPlaying(message: Message) {
 async function getQueue(message: Message) {
     const { content } = message;
 
-    if (!content.match(/[\!]q(?:ueue)?/i)) { return; }
+    if (!content.match(/^[\!]q(?:ueue)?/i)) { return; }
     if (!message.guild) { return; }
 
     const queue = getQueueObject(message.guild);
@@ -124,7 +124,7 @@ async function getQueue(message: Message) {
 async function loopQueue(message: Message) {
     const { content } = message;
 
-    if (!content.match(/[\!]loop(?:queue)?/i)) { return; }
+    if (!content.match(/^[\!]loop(?:queue)?/i)) { return; }
     if (!message.guild) { return; }
 
     const queue = getQueueObject(message.guild);
@@ -139,7 +139,7 @@ async function loopQueue(message: Message) {
 async function remove(message: Message) {
     const { content } = message;
 
-    const match = content.match(/[\!]remove (.*)/i);
+    const match = content.match(/^[\!]remove (.*)/i);
     if (!match) { return; }
     if (!message.guild) { return; }
 
@@ -161,7 +161,7 @@ async function remove(message: Message) {
 async function shuffle(message: Message) {
     const { content } = message;
 
-    if (!content.match(/[\!]shuffle(?:queue)?/i)) { return; }
+    if (!content.match(/^[\!]shuffle(?:queue)?/i)) { return; }
     if (!message.guild) { return; }
 
     const queue = getQueueObject(message.guild);
@@ -176,7 +176,7 @@ async function shuffle(message: Message) {
 async function save(message: Message) {
     const { content } = message;
 
-    if (!content.match(/[\!]save/i)) { return; }
+    if (!content.match(/^[\!]save/i)) { return; }
     if (!message.guild) { return; }
 
     const queue = getQueueObject(message.guild);
@@ -191,7 +191,7 @@ async function save(message: Message) {
 async function load(message: Message) {
     const { content } = message;
 
-    const match = content.match(/[\!]load (.*)/i);
+    const match = content.match(/^[\!]load (.*)/i);
     if (!match) { return; }
     if (!message.guild) { return; }
 
@@ -206,7 +206,7 @@ async function load(message: Message) {
 function leave(message: Message) {
     const { content } = message;
 
-    if (!content.match(/[\!]leave/i)) { return; }
+    if (!content.match(/^[\!]leave/i)) { return; }
     if (!message.guild) { return; }
 
     const queue = getQueueObject(message.guild);
