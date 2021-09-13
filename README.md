@@ -1,6 +1,6 @@
 # turntable
 
-Add to your discord server here: [turntable.tpwm.club](https://turntable.tpwm.club).
+Add to your discord server here: [turntable.tpwm.club](http://turntable.tpwm.club).
 
 To run your own bot, clone this repo, then run
 
