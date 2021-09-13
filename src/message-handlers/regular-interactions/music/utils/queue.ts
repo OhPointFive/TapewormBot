@@ -12,7 +12,7 @@ export class Queue {
 
     private nowPlaying: VideoInfo | undefined = undefined;
     private queue: VideoInfo[] = [];
-    private loopQueue = true;
+    private loopQueue = false;
 
     private getChannel(message?: Message) {
         const candidates = [];
