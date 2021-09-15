@@ -14,6 +14,7 @@ export function getChannel(guild: Guild): VoiceChannel | undefined {
 }
 
 export async function joinChannel(channel: VoiceChannel) {
+    Logger.info(`Joining ${channel.name} in ${channel.guild.name}`);
     try {
         const connection = await channel.join();
         connections.set(channel.guild.id, connection);
@@ -25,6 +26,7 @@ export async function joinChannel(channel: VoiceChannel) {
 }
 
 export async function leaveConnection(connection: VoiceConnection) {
+    Logger.info(`Leaving ${connection.channel.name} in ${connection.channel.guild.name}`);
     try {
         connections.delete(connection.channel.guild.id);
         connection.disconnect();
