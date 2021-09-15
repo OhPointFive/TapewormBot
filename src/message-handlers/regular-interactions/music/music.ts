@@ -253,5 +253,5 @@ export const music = sequence([
     save,
     load,
     leave,
-    error,
+    // error,
 ]);
