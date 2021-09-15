@@ -226,6 +226,17 @@ function leave(message: Message) {
     return true;
 }
 
+function error(message: Message) {
+    const { content } = message;
+
+    if (!content.match(/^[\!]error/i)) { return; }
+    if (!message.guild) { return; }
+
+    loadResponse(message, (async () => { throw new Error("woops"); })());
+
+    return true;
+}
+
 export const music = sequence([
     playSong,
     playtopSong,
@@ -240,4 +251,5 @@ export const music = sequence([
     save,
     load,
     leave,
+    error,
 ]);
