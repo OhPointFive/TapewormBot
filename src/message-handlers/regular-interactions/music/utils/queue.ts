@@ -146,8 +146,8 @@ export class Queue {
         }
     }
 
-    public skip(message: Message) {
-        this.playNextSongInQueue(message);
+    public async skip(message: Message) {
+        await this.playNextSongInQueue(message);
         return "Skipping...";
     }
 

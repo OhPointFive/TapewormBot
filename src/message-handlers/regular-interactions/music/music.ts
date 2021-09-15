@@ -6,7 +6,17 @@ const queues: Map<string, Queue> = new Map();
 
 async function loadResponse(message: Message, responsePromise: Promise<string>) {
     const outputMessagePromise = message.channel.send(":hourglass:");
-    const response = await responsePromise;
+    let response;
+    try {
+        response = await responsePromise;
+    } catch (error) {
+        const { reason } = error as any;
+        if (typeof reason === "string") {
+            response = reason;
+        } else {
+            response = "An unknown error occurred. Hey <@218737910508158977>, check the error logs.";
+        }
+    }
     const outputMessage = await outputMessagePromise;
     outputMessage.edit(response);
 }
@@ -84,9 +94,7 @@ async function skipSong(message: Message) {
 
     const queue = getQueueObject(message.guild);
 
-    const response = queue.skip(message);
-
-    message.channel.send(response);
+    await loadResponse(message, queue.skip(message));
 
     return true;
 }
