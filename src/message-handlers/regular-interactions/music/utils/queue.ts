@@ -49,13 +49,19 @@ export class Queue {
         // tslint:disable-next-line: no-bitwise
         const stream = fetchVideo(this.nowPlaying!.url, { highWaterMark: 1 << 25 } as any);
 
-        playAudioStreamInChannel(channel, stream).then(() => {
-            if (this.loopQueue && this.nowPlaying) {
-                this.queue.push(this.nowPlaying);
-            }
-            this.nowPlaying = undefined;
-            this.playNextSongInQueue();
-        });
+        const { finished, error } = await playAudioStreamInChannel(channel, stream);
+
+        if (error) {
+            throw error;
+        } else if (finished) {
+            finished.then(() => {
+                if (this.loopQueue && this.nowPlaying) {
+                    this.queue.push(this.nowPlaying);
+                }
+                this.nowPlaying = undefined;
+                this.playNextSongInQueue();
+            });
+        }
     }
 
     private songIDList(): string[] {
