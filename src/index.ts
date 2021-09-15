@@ -7,7 +7,14 @@ import { Logger } from "./utils/logger";
 export async function setUp() {
     const client = new Client();
 
-    client.on("ready", () => { Logger.note(`Logged in as ${client.user?.tag}!`); });
+    client.on("ready", () => {
+        Logger.note(`Logged in as ${client.user?.tag}!`);
+        client.user?.setActivity({
+            name: "!help",
+            url: "http://bot.tpwm.club",
+            type: "CUSTOM_STATUS",
+        });
+    });
     client.on("message", async (message) => { await handleMessage(client, message); });
     await logIn(client);
 }
