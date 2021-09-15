@@ -1,6 +1,6 @@
-# turntable
+# TapewormBot
 
-Add to your discord server here: [turntable.tpwm.club](http://turntable.tpwm.club).
+Add to your discord server here: [bot.tpwm.club](http://bot.tpwm.club).
 
 To run your own bot, clone this repo, then run
 
