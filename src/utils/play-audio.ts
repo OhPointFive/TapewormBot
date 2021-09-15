@@ -29,8 +29,7 @@ export async function leaveConnection(connection: VoiceConnection) {
         connections.delete(connection.channel.guild.id);
         connection.disconnect();
     } catch (error) {
-        Logger.error("Couldn't leave channel.");
-        console.error(error);
+        Logger.error("Couldn't leave channel.", error);
     }
 }
 
@@ -66,8 +65,7 @@ export async function playAudioStreamInChannel(channel: VoiceChannel, str: any) 
             res(undefined);
         });
         stream.on("error", (error) => {
-            Logger.error("Unknown error");
-            console.error(error);
+            Logger.error("Unknown error", error);
             res(undefined);
         });
         stream.on("debug", (debug) => {

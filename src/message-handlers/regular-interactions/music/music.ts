@@ -15,8 +15,7 @@ async function loadResponse(message: Message, responsePromise: Promise<string>) 
         if (typeof reason === "string") {
             response = reason;
         } else {
-            Logger.error("Unknown error");
-            console.error(error);
+            Logger.error("Unknown error", error);
             response = "An unknown error occurred. Hey <@218737910508158977>, check the error logs.";
         }
     }
