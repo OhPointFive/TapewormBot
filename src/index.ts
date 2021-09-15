@@ -2,11 +2,12 @@ import { Client } from "discord.js";
 import { fs } from "mz";
 import { TypedJSON } from "typesafe-json";
 import { handleMessage } from "./message-handlers";
+import { Logger } from "./utils/logger";
 
 export async function setUp() {
     const client = new Client();
 
-    client.on("ready", () => { console.log(`Logged in as ${client.user?.tag}!`); });
+    client.on("ready", () => { Logger.note(`Logged in as ${client.user?.tag}!`); });
     client.on("message", async (message) => { await handleMessage(client, message); });
     await logIn(client);
 }
@@ -17,6 +18,7 @@ async function logIn(client: Client) {
         tokenBuffer = (await fs.readFile("./secret.json"));
     } catch (error) {
         await fs.writeFile("./secret.json", "{ \"token\": \"Paste your bot's secret token between these quotation marks\" }");
+        Logger.error("Add a bot token to secret.json");
         throw new Error("Please add a bot token to secret.json");
     }
     const tokenJSON = TypedJSON.parse(tokenBuffer.toString());
@@ -25,7 +27,7 @@ async function logIn(client: Client) {
     try {
         await client.login(token);
     } catch (error) {
-        console.log("Add your bot's token to secret.json");
+        Logger.error("Add your bot's token to secret.json");
         throw error;
     }
 }

@@ -1,6 +1,7 @@
 import { Guild, VoiceChannel, VoiceConnection } from "discord.js";
 import * as path from "path";
 import { NoPermissionError } from "./errors";
+import { Logger } from "./logger";
 
 const connections: Map<string, VoiceConnection> = new Map();
 
@@ -18,7 +19,7 @@ export async function joinChannel(channel: VoiceChannel) {
         connections.set(channel.guild.id, connection);
         return await channel.join();
     } catch (err) {
-        console.log(`Tried to join channel ${channel.name} in ${channel.guild.name} but did not have permission.`);
+        Logger.info(`Tried to join channel ${channel.name} in ${channel.guild.name} but did not have permission.`);
         throw new NoPermissionError(`Didn't have permission to join ${channel.name}`);
     }
 }
@@ -27,9 +28,9 @@ export async function leaveConnection(connection: VoiceConnection) {
     try {
         connections.delete(connection.channel.guild.id);
         connection.disconnect();
-    } catch (err) {
-        console.error("Couldn't leave channel.");
-        console.error(err);
+    } catch (error) {
+        Logger.error("Couldn't leave channel.");
+        console.error(error);
     }
 }
 
@@ -65,11 +66,12 @@ export async function playAudioStreamInChannel(channel: VoiceChannel, str: any) 
             res(undefined);
         });
         stream.on("error", (error) => {
+            Logger.error("Unknown error");
             console.error(error);
             res(undefined);
         });
         stream.on("debug", (debug) => {
-            console.log(debug);
+            Logger.note(debug);
         });
     });
 

@@ -1,4 +1,5 @@
 import { readFileSync, writeFile } from "fs";
+import { Logger } from "./logger";
 
 let dataStore: any = {};
 
@@ -6,7 +7,7 @@ try {
     const file = readFileSync("./data.json", "utf8");
     dataStore = JSON.parse(file);
 } catch {
-    console.log("Could not load cache.");
+    Logger.note("Could not load cache.");
 }
 
 export async function setData(keys: (string | number)[], value: any) {
