@@ -1,5 +1,6 @@
 import { Guild, Message, VoiceChannel } from "discord.js";
 import * as fetchVideoUntyped from "youtube-audio-stream";
+import { Logger } from "../../../../utils/logger";
 import { getChannel, getConnection, leaveConnection, playAudioStreamInChannel } from "../../../../utils/play-audio";
 import { randomElement, shuffle } from "../../../../utils/random";
 import { getRandomSong, removeSong } from "./all-songs";
@@ -59,7 +60,10 @@ export class Queue {
                     this.queue.push(this.nowPlaying);
                 }
                 this.nowPlaying = undefined;
-                this.playNextSongInQueue();
+                this.playNextSongInQueue()
+                    .catch((error) => {
+                        Logger.error("Unknown error", error);
+                    });
             });
         }
     }
@@ -106,7 +110,7 @@ export class Queue {
         }
 
         if (!this.nowPlaying) {
-            this.playNextSongInQueue(message);
+            await this.playNextSongInQueue(message);
             if (!this.nowPlaying) {
                 return `Could not find ${name}`;
             }
@@ -200,7 +204,7 @@ export class Queue {
         }
 
         if (!this.nowPlaying) {
-            this.playNextSongInQueue(message);
+            await this.playNextSongInQueue(message);
         }
 
         return `Loaded ${count} song${count === 1 ? "" : "s"}`;
