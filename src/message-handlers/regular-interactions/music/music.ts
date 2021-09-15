@@ -236,7 +236,6 @@ function help(message: Message) {
 
     message.channel.send(`
 **TapewormBot**
-
 __Commands__
 \`!help\` — Does this
 \`!play [song]\` — Plays a song
@@ -249,7 +248,6 @@ __Commands__
 \`!shuffle\` — Shuffles the queue
 \`!random\` — Plays a random song
 \`!leave\` — :(
-
 __Links__
 Add this bot to your server at <http://bot.tpwm.club>
 See the code & run your own bot here <https://github.com/OhPointFive/TapewormBot>
