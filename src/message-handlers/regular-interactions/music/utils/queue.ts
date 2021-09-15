@@ -53,6 +53,7 @@ export class Queue {
         const { finished, error } = await playAudioStreamInChannel(channel, stream);
 
         if (error) {
+            this.leave();
             throw error;
         } else if (finished) {
             finished.then(() => {
