@@ -228,6 +228,34 @@ function leave(message: Message) {
     return true;
 }
 
+function help(message: Message) {
+    const { content } = message;
+
+    if (!content.match(/^[\!]help/i)) { return; }
+    if (!message.guild) { return; }
+
+    message.channel.send(`
+**TapewormBot**
+
+__Commands__
+\`!help\` — Does this
+\`!play [song]\` — Plays a song
+\`!playtop [song]\` — Plays a song next
+\`!np\` — Shows the current song
+\`!queue\` — Shows the songs up next
+\`!loop\` — Repeats the queue
+\`!skip\` — Skips the current song
+\`!remove [n]\` — Removes a song from the queue
+\`!shuffle\` — Shuffles the queue
+\`!random\` — Plays a random song
+\`!leave\` — :(
+
+__Links__
+Add this bot to your server at <http://bot.tpwm.club>
+See the code & run your own bot here <https://github.com/OhPointFive/TapewormBot>
+    `);
+}
+
 function error(message: Message) {
     const { content } = message;
 
@@ -253,5 +281,6 @@ export const music = sequence([
     save,
     load,
     leave,
+    help,
     // error,
 ]);
