@@ -298,6 +298,76 @@ async function voicePlayTop(message: VoiceMessage) {
     return true;
 }
 
+async function voicePlayRandom(message: VoiceMessage) {
+    const { content } = message;
+
+    const match = content?.match(/(?:tape|worm|tapeworm) random/i);
+    if (!match) { return; }
+    if (!message.guild) { return; }
+
+    const queue = getQueueObject(message.guild);
+
+    await queue.enqueueRandomSong(message);
+
+    return true;
+}
+
+async function voicePlayRandomTop(message: VoiceMessage) {
+    const { content } = message;
+
+    const match = content?.match(/(?:tape|worm|tapeworm) random top/i);
+    if (!match) { return; }
+    if (!message.guild) { return; }
+
+    const queue = getQueueObject(message.guild);
+
+    await queue.enqueueRandomSongTop(message);
+
+    return true;
+}
+
+async function voiceSkip(message: VoiceMessage) {
+    const { content } = message;
+
+    const match = content?.match(/(?:tape|worm|tapeworm) skip/i);
+    if (!match) { return; }
+    if (!message.guild) { return; }
+
+    const queue = getQueueObject(message.guild);
+
+    await queue.skip(message);
+
+    return true;
+}
+
+async function voiceLoop(message: VoiceMessage) {
+    const { content } = message;
+
+    const match = content?.match(/(?:tape|worm|tapeworm) loop/i);
+    if (!match) { return; }
+    if (!message.guild) { return; }
+
+    const queue = getQueueObject(message.guild);
+
+    await queue.toggleLoopQueue();
+
+    return true;
+}
+
+async function voiceLeave(message: VoiceMessage) {
+    const { content } = message;
+
+    const match = content?.match(/(?:tape|worm|tapeworm) loop/i);
+    if (!match) { return; }
+    if (!message.guild) { return; }
+
+    const queue = getQueueObject(message.guild);
+
+    await queue.leave();
+
+    return true;
+}
+
 function error(message: Message) {
     const { content } = message;
 
@@ -329,6 +399,11 @@ export const music = sequence([
 ]);
 
 export const musicVoice = sequence([
+    voicePlayRandomTop,
+    voicePlayRandom,
+    voiceSkip,
+    voiceLoop,
+    voiceLeave,
     voicePlayTop,
     voicePlay,
 ]);
