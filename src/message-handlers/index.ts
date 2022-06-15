@@ -25,7 +25,7 @@ export async function handleVoiceMessage(client: Client, message: VoiceMessage) 
     if (!user) { return false; }
     if (message.author.equals(user)) { return; }
 
-    const result = await sequence([
+    await sequence([
 
         // Music bot
         musicVoice,
