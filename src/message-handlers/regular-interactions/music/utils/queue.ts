@@ -1,7 +1,7 @@
 import { Guild, Message, VoiceChannel } from "discord.js";
 import * as fetchVideoUntyped from "youtube-audio-stream";
 import { Logger } from "../../../../utils/logger";
-import { getChannel, getConnection, leaveConnection, playAudioStreamInChannel } from "../../../../utils/play-audio";
+import { getChannel, getConnection, joinChannel, leaveConnection, playAudioStreamInChannel } from "../../../../utils/play-audio";
 import { randomElement, shuffle } from "../../../../utils/random";
 import { getRandomSong, removeSong } from "./all-songs";
 import { time } from "./time-format";
@@ -22,7 +22,7 @@ export class Queue {
             return currentChannel;
         }
         for (const channel of Array.from(this.guild.channels.cache.values())) {
-            if (channel.type !== "voice") { continue; }
+            if (channel.type !== "GUILD_VOICE") { continue; }
             const vc = channel as VoiceChannel;
             candidates.push(vc);
             if (message) {
@@ -33,6 +33,17 @@ export class Queue {
             }
         }
         return randomElement(candidates);
+    }
+
+    public async join(message?: Message) {
+        let connection = getConnection(this.guild);
+        if (connection) { return "Could not join :("; }
+
+        const channel = this.getChannel(message);
+        connection = joinChannel(channel);
+        if (!connection) { return "Could not join :("; }
+
+        return "Joined!";
     }
 
     private async playNextSongInQueue(message?: Message) {

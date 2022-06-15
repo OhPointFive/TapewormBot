@@ -32,6 +32,19 @@ function getQueueObject(guild: Guild) {
     return queue;
 }
 
+async function join(message: Message) {
+    const { content } = message;
+
+    const match = content.match(/^[\!]j(?:oin)?/i);
+    if (!match) { return; }
+    if (!message.guild) { return; }
+
+    const queue = getQueueObject(message.guild);
+    await loadResponse(message, queue.join(message));
+
+    return true;
+}
+
 async function playSong(message: Message) {
     const { content } = message;
 
@@ -266,6 +279,7 @@ function error(message: Message) {
 }
 
 export const music = sequence([
+    join,
     playSong,
     playtopSong,
     playRandom,

@@ -23,7 +23,7 @@ export async function setUp() {
             type: "PLAYING",
         });
     });
-    client.on("message", async (message) => { await handleMessage(client, message); });
+    client.on("messageCreate", async (message) => { await handleMessage(client, message); });
     client.on("speech", (message: VoiceMessage) => {
         console.log(`${message.author.username}: ${message.content}`);
     });
