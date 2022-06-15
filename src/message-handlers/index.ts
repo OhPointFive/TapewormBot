@@ -32,7 +32,7 @@ export async function handleVoiceMessage(client: Client, message: VoiceMessage) 
 
     ])(message);
 
-    if (result) {
+    // if (result) {
         console.log(`${message.author.username}: ${message.content}`);
-    }
+    // }
 }
