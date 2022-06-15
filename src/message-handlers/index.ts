@@ -25,14 +25,14 @@ export async function handleVoiceMessage(client: Client, message: VoiceMessage) 
     if (!user) { return false; }
     if (message.author.equals(user)) { return; }
 
-    await sequence([
+    const result = await sequence([
 
         // Music bot
         musicVoice,
 
     ])(message);
 
-    // if (result) {
+    if (result) {
         console.log(`${message.author.username}: ${message.content}`);
-    // }
+    }
 }

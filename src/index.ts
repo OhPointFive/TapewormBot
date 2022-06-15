@@ -13,7 +13,10 @@ export async function setUp() {
             Intents.FLAGS.GUILD_MESSAGES,
         ],
     });
-    addSpeechEvent(client);
+    // Google thinks my account is suspicious so it won't let me pay for speech to text :(
+    if (false) {
+        addSpeechEvent(client);
+    }
 
     client.on("ready", () => {
         Logger.note(`Logged in as ${client.user?.tag}!`);
