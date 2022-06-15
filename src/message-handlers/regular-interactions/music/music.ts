@@ -242,6 +242,36 @@ function leave(message: Message) {
     return true;
 }
 
+function pause(message: Message) {
+    const { content } = message;
+
+    if (!content.match(/^[\!]pause/i)) { return; }
+    if (!message.guild) { return; }
+
+    const queue = getQueueObject(message.guild);
+
+    const response = queue.pause();
+
+    message.channel.send(response);
+
+    return true;
+}
+
+function resume(message: Message) {
+    const { content } = message;
+
+    if (!content.match(/^[\!](?:resume|play$)/i)) { return; }
+    if (!message.guild) { return; }
+
+    const queue = getQueueObject(message.guild);
+
+    const response = queue.resume();
+
+    message.channel.send(response);
+
+    return true;
+}
+
 function help(message: Message) {
     const { content } = message;
 
@@ -286,7 +316,7 @@ async function voicePlay(message: VoiceMessage) {
 async function voicePlayTop(message: VoiceMessage) {
     const { content } = message;
 
-    const match = content?.match(/(?:tape|worm|tapeworm) (?:play|queue) top (.*)/i);
+    const match = content?.match(/(?:tape|worm|tapeworm|april|aquarium|airport|apron|superman) (?:play|queue) top (.*)/i);
     if (!match) { return; }
     if (!message.guild) { return; }
 
@@ -301,7 +331,7 @@ async function voicePlayTop(message: VoiceMessage) {
 async function voicePlayRandom(message: VoiceMessage) {
     const { content } = message;
 
-    const match = content?.match(/(?:tape|worm|tapeworm) random/i);
+    const match = content?.match(/(?:tape|worm|tapeworm|april|aquarium|airport|apron|superman) random/i);
     if (!match) { return; }
     if (!message.guild) { return; }
 
@@ -315,7 +345,7 @@ async function voicePlayRandom(message: VoiceMessage) {
 async function voicePlayRandomTop(message: VoiceMessage) {
     const { content } = message;
 
-    const match = content?.match(/(?:tape|worm|tapeworm) random top/i);
+    const match = content?.match(/(?:tape|worm|tapeworm|april|aquarium|airport|apron|superman) random top/i);
     if (!match) { return; }
     if (!message.guild) { return; }
 
@@ -329,7 +359,7 @@ async function voicePlayRandomTop(message: VoiceMessage) {
 async function voiceSkip(message: VoiceMessage) {
     const { content } = message;
 
-    const match = content?.match(/(?:tape|worm|tapeworm) skip/i);
+    const match = content?.match(/(?:tape|worm|tapeworm|april|aquarium|airport|apron|superman) skip/i);
     if (!match) { return; }
     if (!message.guild) { return; }
 
@@ -343,7 +373,7 @@ async function voiceSkip(message: VoiceMessage) {
 async function voiceLoop(message: VoiceMessage) {
     const { content } = message;
 
-    const match = content?.match(/(?:tape|worm|tapeworm) loop/i);
+    const match = content?.match(/(?:tape|worm|tapeworm|april|aquarium|airport|apron|superman) loop/i);
     if (!match) { return; }
     if (!message.guild) { return; }
 
@@ -357,13 +387,41 @@ async function voiceLoop(message: VoiceMessage) {
 async function voiceLeave(message: VoiceMessage) {
     const { content } = message;
 
-    const match = content?.match(/(?:tape|worm|tapeworm) loop/i);
+    const match = content?.match(/(?:tape|worm|tapeworm|april|aquarium|airport|apron|superman) loop/i);
     if (!match) { return; }
     if (!message.guild) { return; }
 
     const queue = getQueueObject(message.guild);
 
     await queue.leave();
+
+    return true;
+}
+
+async function voicePause(message: VoiceMessage) {
+    const { content } = message;
+
+    const match = content?.match(/(?:tape|worm|tapeworm|april|aquarium|airport|apron|superman) (?:pause|paws)/i);
+    if (!match) { return; }
+    if (!message.guild) { return; }
+
+    const queue = getQueueObject(message.guild);
+
+    await queue.pause();
+
+    return true;
+}
+
+async function voiceResume(message: VoiceMessage) {
+    const { content } = message;
+
+    const match = content?.match(/(?:tape|worm|tapeworm|april|aquarium|airport|apron|superman) (?:resume|play$)/i);
+    if (!match) { return; }
+    if (!message.guild) { return; }
+
+    const queue = getQueueObject(message.guild);
+
+    await queue.resume();
 
     return true;
 }
@@ -394,6 +452,8 @@ export const music = sequence([
     save,
     load,
     leave,
+    pause,
+    resume,
     help,
     error,
 ]);
@@ -404,6 +464,8 @@ export const musicVoice = sequence([
     voiceSkip,
     voiceLoop,
     voiceLeave,
+    voicePause,
+    voiceResume,
     voicePlayTop,
     voicePlay,
 ]);

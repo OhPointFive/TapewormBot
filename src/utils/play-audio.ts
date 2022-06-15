@@ -1,12 +1,20 @@
-import { AudioPlayerStatus, createAudioPlayer, createAudioResource, joinVoiceChannel, VoiceConnection } from "@discordjs/voice";
+import { AudioPlayer, AudioPlayerStatus, createAudioPlayer, createAudioResource, joinVoiceChannel, VoiceConnection } from "@discordjs/voice";
 import { Guild, VoiceChannel } from "discord.js";
 import { WriteStream } from "mz/fs";
 import * as path from "path";
 
 const connections: Map<string, VoiceConnection> = new Map();
+const players: Map<VoiceConnection, AudioPlayer> = new Map();
 
 export function getConnection(guild: Guild): VoiceConnection | undefined {
     return connections.get(guild.id);
+}
+
+export function getPlayer(guild: Guild): AudioPlayer | undefined {
+    const connection = getConnection(guild);
+    if (connection) {
+        return players.get(connection);
+    }
 }
 
 export function getChannel(guild: Guild): VoiceChannel | undefined {
@@ -42,6 +50,7 @@ export async function playAudio(connection: VoiceConnection, audio: string) {
     const player = createAudioPlayer();
     player.play(createAudioResource(path.join(__dirname, "..", "..", "..", "audio", audio)));
     connection.subscribe(player);
+    players.set(connection, player);
     return player;
 }
 
@@ -59,6 +68,7 @@ export async function playAudioStream(connection: VoiceConnection, str: WriteStr
     const player = createAudioPlayer();
     player.play(createAudioResource(str as any));
     connection.subscribe(player);
+    players.set(connection, player);
     return player;
 }
 

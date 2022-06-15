@@ -2,7 +2,7 @@ import { VoiceMessage } from "discord-speech-recognition";
 import { Guild, Message, VoiceChannel } from "discord.js";
 import * as fetchVideoUntyped from "youtube-audio-stream";
 import { Logger } from "../../../../utils/logger";
-import { getChannel, getConnection, joinChannel, leaveConnection, playAudioStreamInChannel } from "../../../../utils/play-audio";
+import { getChannel, getConnection, getPlayer, joinChannel, leaveConnection, playAudioStreamInChannel } from "../../../../utils/play-audio";
 import { randomElement, shuffle } from "../../../../utils/random";
 import { getRandomSong, removeSong } from "./all-songs";
 import { time } from "./time-format";
@@ -53,8 +53,10 @@ export class Queue {
         this.nowPlaying = this.queue.shift();
 
         if (!this.nowPlaying) {
-            const connection = getConnection(this.guild);
-            if (connection) { leaveConnection(connection); }
+            const player = getPlayer(this.guild);
+            if (player) {
+                player.stop();
+            }
             return;
         }
 
@@ -85,6 +87,18 @@ export class Queue {
         return [this.nowPlaying, ...this.queue]
             .filter((a): a is VideoInfo => !!a)
             .map((video) => video.videoId);
+    }
+
+    public pause() {
+        const player = getPlayer(this.guild);
+        player?.pause();
+        return "Paused!";
+    }
+
+    public resume() {
+        const player = getPlayer(this.guild);
+        player?.unpause();
+        return "Resumed!";
     }
 
     public async enqueueSong(message: Message | VoiceMessage, name: string, top = false): Promise<string> {

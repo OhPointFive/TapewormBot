@@ -25,9 +25,9 @@ export async function handleVoiceMessage(client: Client, message: VoiceMessage) 
     if (!user) { return false; }
     if (message.author.equals(user)) { return; }
 
-    if (message.content?.match(/tape|worm|tapeworm/)) {
+    // if (message.content?.match(/tape|worm|tapeworm/)) {
         console.log(`${message.author.username}: ${message.content}`);
-    }
+    // }
 
     await sequence([
 
