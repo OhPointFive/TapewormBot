@@ -1,7 +1,7 @@
-import { Guild, VoiceChannel, VoiceConnection } from "discord.js";
+import { AudioPlayerStatus, createAudioPlayer, createAudioResource, joinVoiceChannel, VoiceConnection } from "@discordjs/voice";
+import { Guild, VoiceChannel } from "discord.js";
+import { WriteStream } from "mz/fs";
 import * as path from "path";
-import { NoPermissionError } from "./errors";
-import { Logger } from "./logger";
 
 const connections: Map<string, VoiceConnection> = new Map();
 
@@ -10,70 +10,72 @@ export function getConnection(guild: Guild): VoiceConnection | undefined {
 }
 
 export function getChannel(guild: Guild): VoiceChannel | undefined {
-    return getConnection(guild)?.channel;
+    return guild.channels.cache.get(getConnection(guild)?.joinConfig.channelId || "") as VoiceChannel;
 }
 
-export async function joinChannel(channel: VoiceChannel) {
-    Logger.info(`Joining ${channel.name} in ${channel.guild.name}`);
+export function joinChannel(channel: VoiceChannel) {
     try {
-        const connection = await channel.join();
+        const connection = joinVoiceChannel({
+            channelId: channel.id,
+            guildId: channel.guildId,
+            adapterCreator: channel.guild.voiceAdapterCreator as any,
+        });
         connections.set(channel.guild.id, connection);
-        return await channel.join();
+        return connection;
     } catch (err) {
-        Logger.info(`Tried to join channel ${channel.name} in ${channel.guild.name} but did not have permission.`);
-        throw new NoPermissionError(`Didn't have permission to join ${channel.name}`);
+        console.log(`Tried to join channel ${channel.name} in ${channel.guild.name} but did not have permission.`);
     }
 }
 
 export async function leaveConnection(connection: VoiceConnection) {
-    Logger.info(`Leaving ${connection.channel.name} in ${connection.channel.guild.name}`);
     try {
-        connections.delete(connection.channel.guild.id);
+        connections.delete(connection.joinConfig.guildId);
         connection.disconnect();
-    } catch (error) {
-        Logger.error("Couldn't leave channel.", error);
+    } catch (err) {
+        console.error("Couldn't leave channel.");
+        console.error(err);
     }
 }
 
 export async function playAudio(connection: VoiceConnection, audio: string) {
-    return connection.play(path.join(__dirname, "..", "..", "..", "audio", audio));
+    const player = createAudioPlayer();
+    player.play(createAudioResource(path.join(__dirname, "..", "..", "..", "audio", audio)));
+    connection.subscribe(player);
+    return player;
 }
 
 export async function playAudioInChannel(channel: VoiceChannel, audio: string) {
     if (getConnection(channel.guild)) { return; }
-    const connection = await joinChannel(channel);
+    const connection = joinChannel(channel);
     if (!connection) { return; }
     const stream = await playAudio(connection, audio);
-    stream.on("finish", () => {
+    stream.on(AudioPlayerStatus.Idle, () => {
         leaveConnection(connection);
     });
 }
 
-export async function playAudioStream(connection: VoiceConnection, str: any) {
-    return connection.play(str);
+export async function playAudioStream(connection: VoiceConnection, str: WriteStream) {
+    const player = createAudioPlayer();
+    player.play(createAudioResource(str as any));
+    connection.subscribe(player);
+    return player;
 }
 
 export async function playAudioStreamInChannel(channel: VoiceChannel, str: any) {
     let connection;
     try {
         connection = await joinChannel(channel);
+        if (!connection) { throw new Error("Could not connect!"); }
     } catch (error) {
         return { finished: undefined, error };
     }
-
     const stream = await playAudioStream(connection, str);
     const finished = new Promise((res) => {
-        stream.on("finish", () => {
-            res(undefined);
-        });
-        stream.on("error", (error) => {
-            Logger.error("Unknown error", error);
-            res(undefined);
-        });
-        stream.on("debug", (debug) => {
-            Logger.note(debug);
+        stream.on(AudioPlayerStatus.Idle, () => {
+            res({ error: null, finished: true });
         });
     });
+
 
     return { finished, error: undefined };
 }

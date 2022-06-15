@@ -1,21 +1,32 @@
-import { Client } from "discord.js";
+import { addSpeechEvent, VoiceMessage } from "discord-speech-recognition";
+import { Client, Intents } from "discord.js";
 import { fs } from "mz";
 import { TypedJSON } from "typesafe-json";
 import { handleMessage } from "./message-handlers";
 import { Logger } from "./utils/logger";
 
 export async function setUp() {
-    const client = new Client();
+    const client = new Client({
+        intents: [
+            Intents.FLAGS.GUILDS,
+            Intents.FLAGS.GUILD_VOICE_STATES,
+            Intents.FLAGS.GUILD_MESSAGES,
+        ],
+    });
+    addSpeechEvent(client);
 
     client.on("ready", () => {
         Logger.note(`Logged in as ${client.user?.tag}!`);
         client.user?.setActivity({
             name: "!help",
             url: "http://bot.tpwm.club",
-            type: "CUSTOM_STATUS",
+            type: "PLAYING",
         });
     });
     client.on("message", async (message) => { await handleMessage(client, message); });
+    client.on("speech", (message: VoiceMessage) => {
+        console.log(`${message.author.username}: ${message.content}`);
+    });
     await logIn(client);
 }
 
