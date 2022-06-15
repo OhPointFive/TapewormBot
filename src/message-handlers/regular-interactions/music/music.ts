@@ -1,3 +1,4 @@
+import { VoiceMessage } from "discord-speech-recognition";
 import { Guild , Message } from "discord.js";
 import { Logger } from "../../../utils/logger";
 import { sequence } from "../../../utils/sequencer";
@@ -267,6 +268,36 @@ See the code & run your own bot here <https://github.com/OhPointFive/TapewormBot
     `);
 }
 
+async function voicePlay(message: VoiceMessage) {
+    const { content } = message;
+
+    const match = content?.match(/(?:tape)?worm (?:play|queue) (.*)/i);
+    if (!match) { return; }
+    if (!message.guild) { return; }
+
+    const queue = getQueueObject(message.guild);
+    const name = match[1];
+
+    await queue.enqueueSong(message, name);
+
+    return true;
+}
+
+async function voicePlayTop(message: VoiceMessage) {
+    const { content } = message;
+
+    const match = content?.match(/(?:tape|worm|tapeworm) (?:play|queue) top (.*)/i);
+    if (!match) { return; }
+    if (!message.guild) { return; }
+
+    const queue = getQueueObject(message.guild);
+    const name = match[1];
+
+    await queue.enqueueSong(message, name, true);
+
+    return true;
+}
+
 function error(message: Message) {
     const { content } = message;
 
@@ -295,4 +326,9 @@ export const music = sequence([
     leave,
     help,
     error,
+]);
+
+export const musicVoice = sequence([
+    voicePlayTop,
+    voicePlay,
 ]);

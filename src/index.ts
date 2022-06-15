@@ -2,7 +2,7 @@ import { addSpeechEvent, VoiceMessage } from "discord-speech-recognition";
 import { Client, Intents } from "discord.js";
 import { fs } from "mz";
 import { TypedJSON } from "typesafe-json";
-import { handleMessage } from "./message-handlers";
+import { handleMessage, handleVoiceMessage } from "./message-handlers";
 import { Logger } from "./utils/logger";
 
 export async function setUp() {
@@ -24,9 +24,7 @@ export async function setUp() {
         });
     });
     client.on("messageCreate", async (message) => { await handleMessage(client, message); });
-    client.on("speech", (message: VoiceMessage) => {
-        console.log(`${message.author.username}: ${message.content}`);
-    });
+    client.on("speech", async (message: VoiceMessage) => { await handleVoiceMessage(client, message); });
     await logIn(client);
 }
 

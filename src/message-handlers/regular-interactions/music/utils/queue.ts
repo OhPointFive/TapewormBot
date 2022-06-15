@@ -1,3 +1,4 @@
+import { VoiceMessage } from "discord-speech-recognition";
 import { Guild, Message, VoiceChannel } from "discord.js";
 import * as fetchVideoUntyped from "youtube-audio-stream";
 import { Logger } from "../../../../utils/logger";
@@ -15,7 +16,7 @@ export class Queue {
     private queue: VideoInfo[] = [];
     private loopQueue = false;
 
-    private getChannel(message?: Message) {
+    private getChannel(message?: Message | VoiceMessage) {
         const candidates = [];
         const currentChannel = getChannel(this.guild);
         if (currentChannel) {
@@ -46,7 +47,7 @@ export class Queue {
         return "Joined!";
     }
 
-    private async playNextSongInQueue(message?: Message) {
+    private async playNextSongInQueue(message?: Message | VoiceMessage) {
         if (this.loopQueue && this.nowPlaying) { this.queue.push(this.nowPlaying); }
 
         this.nowPlaying = this.queue.shift();
@@ -86,7 +87,7 @@ export class Queue {
             .map((video) => video.videoId);
     }
 
-    public async enqueueSong(message: Message, name: string, top = false): Promise<string> {
+    public async enqueueSong(message: Message | VoiceMessage, name: string, top = false): Promise<string> {
         const playlistMatch = name.match(/list=([^\&]*)/);
 
         let playlist;
@@ -142,13 +143,13 @@ export class Queue {
         return "Something broke but maybe a song will start playing idk";
     }
 
-    public async enqueueRandomSong(message: Message): Promise<string> {
+    public async enqueueRandomSong(message: Message | VoiceMessage): Promise<string> {
         const name = getRandomSong(this.songIDList());
         if (!name) { return "Couldn't find any songs :("; }
         return this.enqueueSong(message, name);
     }
 
-    public async enqueueRandomSongTop(message: Message): Promise<string> {
+    public async enqueueRandomSongTop(message: Message | VoiceMessage): Promise<string> {
         const name = getRandomSong(this.songIDList());
         if (!name) { return "Couldn't find any songs :("; }
         return this.enqueueSong(message, name, true);
@@ -162,7 +163,7 @@ export class Queue {
         }
     }
 
-    public async skip(message: Message) {
+    public async skip(message: Message | VoiceMessage) {
         await this.playNextSongInQueue(message);
         return "Skipping...";
     }

@@ -19,6 +19,7 @@ export function joinChannel(channel: VoiceChannel) {
             channelId: channel.id,
             guildId: channel.guildId,
             adapterCreator: channel.guild.voiceAdapterCreator as any,
+            selfDeaf: false,
         });
         connections.set(channel.guild.id, connection);
         return connection;
