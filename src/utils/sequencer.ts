@@ -9,7 +9,7 @@ export function sequence<T extends readonly any[]>(
     return async (...args: T) => {
         for (const func of functions) {
             const result = await func(...args);
-            if (result) { return; }
+            if (result) { return result; }
         }
     };
 }

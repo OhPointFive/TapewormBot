@@ -301,7 +301,7 @@ See the code & run your own bot here <https://github.com/OhPointFive/TapewormBot
 async function voicePlay(message: VoiceMessage) {
     const { content } = message;
 
-    const match = content?.match(/(?:tape)?worm (?:play|queue) (.*)/i);
+    const match = content?.match(/(?:play|queue) (.*)/i);
     if (!match) { return; }
     if (!message.guild) { return; }
 
@@ -316,7 +316,7 @@ async function voicePlay(message: VoiceMessage) {
 async function voicePlayTop(message: VoiceMessage) {
     const { content } = message;
 
-    const match = content?.match(/(?:tape|worm|tapeworm|april|aquarium|airport|apron|superman) (?:play|queue) top (.*)/i);
+    const match = content?.match(/(?:play|queue) top (.*)/i);
     if (!match) { return; }
     if (!message.guild) { return; }
 
@@ -331,7 +331,7 @@ async function voicePlayTop(message: VoiceMessage) {
 async function voicePlayRandom(message: VoiceMessage) {
     const { content } = message;
 
-    const match = content?.match(/(?:tape|worm|tapeworm|april|aquarium|airport|apron|superman) random/i);
+    const match = content?.match(/random/i);
     if (!match) { return; }
     if (!message.guild) { return; }
 
@@ -345,7 +345,7 @@ async function voicePlayRandom(message: VoiceMessage) {
 async function voicePlayRandomTop(message: VoiceMessage) {
     const { content } = message;
 
-    const match = content?.match(/(?:tape|worm|tapeworm|april|aquarium|airport|apron|superman) random top/i);
+    const match = content?.match(/random top/i);
     if (!match) { return; }
     if (!message.guild) { return; }
 
@@ -359,7 +359,7 @@ async function voicePlayRandomTop(message: VoiceMessage) {
 async function voiceSkip(message: VoiceMessage) {
     const { content } = message;
 
-    const match = content?.match(/(?:tape|worm|tapeworm|april|aquarium|airport|apron|superman) skip/i);
+    const match = content?.match(/skip/i);
     if (!match) { return; }
     if (!message.guild) { return; }
 
@@ -373,7 +373,7 @@ async function voiceSkip(message: VoiceMessage) {
 async function voiceLoop(message: VoiceMessage) {
     const { content } = message;
 
-    const match = content?.match(/(?:tape|worm|tapeworm|april|aquarium|airport|apron|superman) loop/i);
+    const match = content?.match(/loop/i);
     if (!match) { return; }
     if (!message.guild) { return; }
 
@@ -387,7 +387,7 @@ async function voiceLoop(message: VoiceMessage) {
 async function voiceLeave(message: VoiceMessage) {
     const { content } = message;
 
-    const match = content?.match(/(?:tape|worm|tapeworm|april|aquarium|airport|apron|superman) loop/i);
+    const match = content?.match(/loop/i);
     if (!match) { return; }
     if (!message.guild) { return; }
 
@@ -401,7 +401,7 @@ async function voiceLeave(message: VoiceMessage) {
 async function voicePause(message: VoiceMessage) {
     const { content } = message;
 
-    const match = content?.match(/(?:tape|worm|tapeworm|april|aquarium|airport|apron|superman) (?:pause|paws)/i);
+    const match = content?.match(/(?:pause|paws)/i);
     if (!match) { return; }
     if (!message.guild) { return; }
 
@@ -415,7 +415,7 @@ async function voicePause(message: VoiceMessage) {
 async function voiceResume(message: VoiceMessage) {
     const { content } = message;
 
-    const match = content?.match(/(?:tape|worm|tapeworm|april|aquarium|airport|apron|superman) (?:resume|play$)/i);
+    const match = content?.match(/(?:resume|play$)/i);
     if (!match) { return; }
     if (!message.guild) { return; }
 
