@@ -14,9 +14,9 @@ export async function setUp() {
         ],
     });
     // Google thinks my account is suspicious so it won't let me pay for speech to text :(
-    // if (false) {
+    if (false) {
         addSpeechEvent(client);
-    // }
+    }
 
     client.on("ready", () => {
         Logger.note(`Logged in as ${client.user?.tag}!`);
