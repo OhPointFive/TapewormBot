@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "dependencies": {
-        "@discordjs/opus": "^0.6.0",
+        "@discordjs/opus": "2.2.0",
         "@discordjs/voice": "^0.6.0",
         "chalk": "^2.4.2",
         "dedent": "^0.7.0",
